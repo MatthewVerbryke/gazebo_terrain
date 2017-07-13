@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Copyright 2017 University of Cincinnati
 # All rights reserved. See LICENSE file at:
-# https://github.com/MatthewVerbryke/inmoov-ros
+# https://github.com/MatthewVerbryke/gazebo_terrain
 # Additional copyright may be held by others, as reflected in the commit history.
 
 import os
