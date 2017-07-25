@@ -19,7 +19,14 @@ else
     exit
 fi
 
-if [ -d ~/.gazebo/models/$MODELNAME ] then;
+# if there is a '..' or spaces in this thing, don't execute it!!
+#if [ $MODELNAME ??? ] then; # checking for '..'
+#    exit
+#elif [ $MODELNAME ??? ] then; # checking for ' '
+#    exit
+#fi
+
+if [ -d /home/$USER/.gazebo/models/$MODELNAME ] then;
     #Delete Files
     #rm -rf /home/$USER/.gazebo/models/$MODELNAME # forcibly delete with no prompts
     rm -ri /home/$USER/.gazebo/models/$MODELNAME # forcibly prompts user, requires interaction from user to delete each file and directory
