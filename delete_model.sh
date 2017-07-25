@@ -19,31 +19,24 @@ else
     exit
 fi
 
-#Delete Files
-cd ~/.gazebo/models/$MODELNAME
+if [ -d ~/.gazebo/models/$MODELNAME ] then;
+    #Delete Files
+    #rm -rf /home/$USER/.gazebo/models/$MODELNAME # forcibly delete with no prompts
+    rm -ri /home/$USER/.gazebo/models/$MODELNAME # forcibly prompts user, requires interaction from user to delete each file and directory
+    
+    # what it should be getting rid of...
+    #rm model.config
+    #rm model.sdf
+    #cd ~/.gazebo/models/$MODELNAME/materials/textures
+    #rm $MODELNAME.png
+    #echo "All files deleted; deleting directories"
+    #cd ~/.gazebo/models/$MODELNAME/materials
+    #rmdir textures
+    #cd ~/.gazebo/models/$MODELNAME
+    #rmdir materials
+    #cd ~/.gazebo/models/
+    #rmdir $MODELNAME
+fi
 
-rm model.config
-echo "..."
-
-rm model.sdf
-echo "..."
-
-cd ~/.gazebo/models/$MODELNAME/materials/textures
-rm $MODELNAME.png
-echo "..."
-
-echo "All files deleted; deleting directories"
-
-cd ~/.gazebo/models/$MODELNAME/materials
-rmdir textures
-echo "..."
-
-cd ~/.gazebo/models/$MODELNAME
-rmdir materials
-echo "..."
-
-cd ~/.gazebo/models/
-rmdir $MODELNAME
-echo "..."
-
+echo "All done! :)"
 #EOF
