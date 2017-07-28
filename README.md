@@ -17,7 +17,7 @@ Tested on Ubuntu 16.04 LTS with Gazebo 7
 
 ### Installation
 
-Copy the repsitory into your `~/catkin_ws/src/` directory; this program assumes that your catkin workspace with the files inside are located at this location. If you have located it somewhere else, you will need to edit the path location in the bash script.
+Clone the repsitory into your `home/$USER/catkin_ws/src/` directory
 
 ### Terrain Generation
 
@@ -35,7 +35,7 @@ Once the program is finished generating the files, open up Gazebo to test out yo
 
 ### Deleting Models
 
-Also included in this repository is `delete_model.sh`, a script that can look into the Gazebo model directory and delete the user selected directory if it exsists. Be careful when using this to not delete default Gazebo models or anything you want to keep!
+Also included in this repository is `delete_model.sh`, a script that can look into the Gazebo model directory and interactively delete the user-selected directory, if it exsists. Be careful when using this to not delete default Gazebo models or anything you want to keep!
 
 Run it with:
 
