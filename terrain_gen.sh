@@ -15,51 +15,41 @@ echo "      If you do not have your image located there, you need to move it   "
 echo "      there before continuing."
 echo " "
 
-# Expected Location of Catkin Workspace Files (source directory, generally)
-CATKIN_WS_SRC="/home/$USER/catkin_ws/src"
-
-# Cleanup 'Temp' Directory
-rm /$CATKIN_WS_SRC/gazebo_terrain/temp/*
-touch placehold
+# Get static paths
+RELATIVE_PATH="`dirname \"$0\"`"
+ABSOLUTE_PATH="`( cd \"$RELATIVE_PATH\" && pwd )`"
 
 # Get Image Name
 echo "What is the name of your heightmap image? (the image name without .png):"
 read YOURIMAGENAME
-	
-# Copy Image
-cp ~/Pictures/$YOURIMAGENAME.png $CATKIN_WS_SRC/gazebo_terrain/temp
-
-# Create Model Files
-cd $CATKIN_WS_SRC/gazebo_terrain/temp
-touch model.config model.sdf
-
-# Resize Image
-cd $CATKIN_WS_SRC/gazebo_terrain/
-python image_resize.py "$YOURIMAGENAME"
-echo " "
-echo "Grayscale heightmap created"
-echo " "
-
-#  Write Data to Model Files
-python model_config_gen.py
-python model_sdf_gen.py "$YOURIMAGENAME"
-echo "model.config and model.sdf created and written-out"
-echo " "
 
 # Create Model Directory
-cd ~/.gazebo/models
+cd /home/$USER/.gazebo/models
 mkdir $YOURIMAGENAME
 cd $YOURIMAGENAME/
 mkdir -p materials/textures/
 echo "Model directory created"
 echo " "
 
-# Move these Files to the Correct Directory
-mv $CATKIN_WS_SRC/gazebo_terrain/temp/model.config ~/.gazebo/models/$YOURIMAGENAME
-mv $CATKIN_WS_SRC/gazebo_terrain/temp/model.sdf ~/.gazebo/models/$YOURIMAGENAME
-mv $CATKIN_WS_SRC/gazebo_terrain/temp/$YOURIMAGENAME.png ~/.gazebo/models/$YOURIMAGENAME/materials/textures
+# Model path
+MODEL_PATH="/home/$USER/.gazebo/models/$YOURIMAGENAME"
 
-echo "Program is finished; You should now be ready to test your heightmap in Gazebo."
+# Copy image into model directory# Create Model Files
+cd $MODEL_PATH
+
+# Create 'model.config' and 'model.sdf'
+touch model.config model.sdf
+cp /home/$USER/Pictures/$YOURIMAGENAME.png $MODEL_PATH/materials/textures
+
+# Resize Image
+cd $ABSOLUTE_PATH/gazeboterrain/
+python image_resize.py "$YOURIMAGENAME" "$MODEL_PATH/materials/textures"
+echo "Heightmap copied and resized to Gazebo's requirements"
 echo " "
+
+#  Write Data to Model Files
+python model_config_gen.py "$MODEL_PATH"
+python model_sdf_gen.py "$MODEL_PATH" "$YOURIMAGENAME"
+echo "'model.config' and 'model.sdf' created and written. The program is finished; You should now be ready to test your heightmap in Gazebo."
 
 #EOF

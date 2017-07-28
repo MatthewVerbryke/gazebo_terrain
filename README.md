@@ -1,10 +1,8 @@
-# gazebo_terrain
+# Gazebo Terrain Model Generator
 
 ## Summary
 
 This repository contains a simple program that can generate a Gazebo model of terrain based on a greyscale .png image input. The program creates the necessary model files for the model based on user input, resizing and reformating the given heightmap image to ensure compatability with Gazebo. (Based from this [tutorial](https://github.com/AS4SR/general_info/wiki/Creating-Heightmaps-for-Gazebo))
-
-Tested on Ubuntu 16.04 LTS with Gazebo 7
 
 ## Requirements
 
@@ -12,6 +10,8 @@ The program requires the following to function:
 * Gazebo
 * [Pillow](http://pillow.readthedocs.io/en/3.0.x/index.html)
 * [python-resize-image](https://pypi.python.org/pypi/python-resize-image)
+
+Tested on Ubuntu 16.04 LTS with Gazebo 7
 
 ## Instructions
 

@@ -8,7 +8,22 @@
 echo "What is the name of the model directory you want to delete?:"
 read MODELNAME
 
-#Safety Feature #2
+# Warning
+echo " "
+echo "Things to delete:"
+echo " "
+echo "  DIRECTORIES"
+echo "    /home/$USER/.gazebo/models/$MODELNAME/materials/textures/"
+echo "    /home/$USER/.gazebo/models/$MODELNAME/materials/"
+echo "    /home/$USER/.gazebo/models/$MODELNAME/"
+echo " "
+echo "  FILES"
+echo "    model.config"
+echo "    model.sdf"
+echo "    $MODELNAME.png"
+echo " "
+
+#Safety Feature
 echo "Are you absolutely sure you want to delete this model? Once deleted, you will"
 echo "NOT be able to recover it! (Y or n)"
 read ANSWER
@@ -19,31 +34,12 @@ else
     exit
 fi
 
-# if there is a '..' or spaces in this thing, don't execute it!!
-#if [ $MODELNAME ??? ] then; # checking for '..'
-#    exit
-#elif [ $MODELNAME ??? ] then; # checking for ' '
-#    exit
-#fi
-
-if [ -d /home/$USER/.gazebo/models/$MODELNAME ] then;
-    #Delete Files
-    #rm -rf /home/$USER/.gazebo/models/$MODELNAME # forcibly delete with no prompts
-    rm -ri /home/$USER/.gazebo/models/$MODELNAME # forcibly prompts user, requires interaction from user to delete each file and directory
-    
-    # what it should be getting rid of...
-    #rm model.config
-    #rm model.sdf
-    #cd ~/.gazebo/models/$MODELNAME/materials/textures
-    #rm $MODELNAME.png
-    #echo "All files deleted; deleting directories"
-    #cd ~/.gazebo/models/$MODELNAME/materials
-    #rmdir textures
-    #cd ~/.gazebo/models/$MODELNAME
-    #rmdir materials
-    #cd ~/.gazebo/models/
-    #rmdir $MODELNAME
+# Interactively delete all files and directories
+if [ -d /home/$USER/.gazebo/models/$MODELNAME ]; then
+    rm -ri /home/$USER/.gazebo/models/$MODELNAME
 fi
 
-echo "All done! :)"
+echo " "
+echo "Program finished. Check to make sure the directory is gone."
+
 #EOF

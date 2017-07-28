@@ -8,21 +8,30 @@ import os
 import sys
 import string
 
-#Asking for Model Information
-img_name = sys.argv[1]
+# Get cwd
+setdir = os.getcwd()
+
+# Command line input
+file_path = sys.argv[1]
+img_name = sys.argv[2]
+
+# Ask for desired dimensions and heights of the Gazebo model
 size_x = raw_input('What would you like the dimensions of the square terrain area be (in meters)?:\n')
 print (' ')
 size_y = size_x
 size_z = raw_input('What would you like to be the highest elevation of the terrain be (in meters)?:\n')
 print(' ')
 
-#Read Template File
+# Change to templates directory
+os.chdir('templates')
+
+# Read template file
 template = open('sdf_temp.txt', 'r')
 tempholdtext = template.read()
 template.close()
 sdftemplate = str(tempholdtext)
 
-#Filling in Content
+# Filling in content
 sdfdata = str(sdftemplate)
 sdfdata = sdfdata.replace( "$FILENAME$", img_name )
 sdfdata = sdfdata.replace( "$SIZEX$", size_x )
@@ -30,13 +39,19 @@ sdfdata = sdfdata.replace( "$SIZEY$", size_y )
 sdfdata = sdfdata.replace( "$SIZEZ$", size_z )
 sdfcontent = str(sdfdata)
 
-#Write to model.sdf
-os.chdir("temp")
+# Go to model directory
+os.chdir(file_path)
+
+# Open file
 target = open('model.sdf', 'w')
+
+# Write to model.sdf
 target.write(sdfcontent)
+
+# Close file
 target.close()
 
-# Change Back Directory
-os.chdir("/..")
+# Change back directory
+os.chdir(setdir)
 
 #EOF

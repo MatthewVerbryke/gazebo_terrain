@@ -9,23 +9,32 @@ import sys
 import string
 from sys import argv
 
-# Ask for Configuration Data
-model_name = raw_input('Input the name of the model (displayed on the Gazebo insert menu):\n')
-print (' ')
-creator_name = raw_input('Input your name:\n')
-print (' ')
-email = raw_input('Input your email address:\n')
-print (' ')
-description = raw_input('Add a short description of the model:\n')
-print (' ')
+# Get cwd
+setdir = os.getcwd()
 
-# Read Template File
+# Command line input
+file_path = sys.argv[1]
+
+# Ask for configuration data
+model_name = raw_input("Input the name of the model (displayed on the Gazebo insert menu):\n")
+print (" ")
+creator_name = raw_input("Input your name:\n")
+print (" ")
+email = raw_input("Input your email address:\n")
+print (" ")
+description = raw_input("Add a short description of the model:\n")
+print (" ")
+
+# Change to templates directory
+os.chdir('templates')
+
+# Read template file
 template = open('config_temp.txt', 'r')
 tempholdtext = template.read()
 template.close()
 configtemplate = str(tempholdtext)
 
-# Fill in Content
+# Fill in content
 configdata = str(configtemplate)
 configdata = configdata.replace( "$MODELNAME$", model_name )
 configdata = configdata.replace( "$AUTHORNAME$", creator_name )
@@ -33,13 +42,19 @@ configdata = configdata.replace( "$EMAILADDRESS$", email )
 configdata = configdata.replace( "$DESCRIPTION$", description )
 configcontent = str(configdata)
 
-# Find and write to model.config
-os.chdir("temp")
+# Go to model directory
+os.chdir(file_path)
+
+# Open file
 target = open('model.config', 'w')
+
+# Write to model.config
 target.write(configcontent)
+
+# Close file
 target.close()
 
-# Change Back Directory
-os.chdir("/..")
+# Change back directory
+os.chdir(setdir)
 
 #EOF
