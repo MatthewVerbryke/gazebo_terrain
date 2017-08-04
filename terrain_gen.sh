@@ -28,6 +28,7 @@ cd /home/$USER/.gazebo/models
 mkdir $YOURIMAGENAME
 cd $YOURIMAGENAME/
 mkdir -p materials/textures/
+echo " "
 echo "Model directory created"
 echo " "
 
