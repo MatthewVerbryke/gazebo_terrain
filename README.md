@@ -11,7 +11,7 @@ The program requires the following to function:
 * [Pillow](http://pillow.readthedocs.io/en/3.0.x/index.html)
 * [python-resize-image](https://pypi.python.org/pypi/python-resize-image)
 
-Tested on Ubuntu 16.04 LTS with Gazebo 7
+Tested on Ubuntu 16.04 LTS with Gazebo 7.9
 
 ## Instructions
 
