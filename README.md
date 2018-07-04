@@ -47,6 +47,7 @@ Run it with:
 
 * I have managed to get up to 8km x 8km terrains to spawn without issue on my computer
 * The image output should be an 8-bit greyscale image. Conversion from 16-bit to 8-bit images are confirmed to work, but it should work with larger grayscales (this still needs to be tested).
+* Based on [issues](http://answers.gazebosim.org/question/17984/heightmap-insertion-unsuccessful-with-gazebo-7/) [others](http://answers.gazebosim.org/question/16319/gazebo-700-crash-on-heightmap-insertion/) have been [having](https://github.com/MatthewVerbryke/gazebo_terrain/issues/1), it appears that you need Gazebo 7.9 or higher for heightmap insertion to work (may work with versions as low as 7.7).
 
 ## License
 
