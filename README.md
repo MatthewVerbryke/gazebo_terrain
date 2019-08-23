@@ -23,7 +23,12 @@ Clone the repsitory into your `home/$USER/catkin_ws/src/` directory
 
 Place your heightmap image into your `Pictures` directory before running the program so that it can be found. This image should be a greyscale PNG.
 
-In the gazebo terrain directory, run the program with:
+In order for this program to work:
+
+  1. The PNG should be a greyscale image without any alpha channels (ideally an unsigned 8-bit image, but the code should be able to convert other bit-size images to the proper format).
+  2. The height and width (in pixels) of the PNG must be equal.
+
+In the `gazebo_terrain` directory, run the program with:
 
 ```
 ./terrain_gen.sh
