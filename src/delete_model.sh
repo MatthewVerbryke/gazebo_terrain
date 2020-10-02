@@ -8,19 +8,18 @@
 echo "What is the name of the model directory you want to delete?:"
 read MODELNAME
 
+
+PACKAGE_PATH=$(rospack find gazebo_terrain)
+
+
 # Warning
 echo " "
 echo "Things to delete:"
 echo " "
-echo "  DIRECTORIES"
-echo "    /home/$USER/.gazebo/models/$MODELNAME/materials/textures/"
-echo "    /home/$USER/.gazebo/models/$MODELNAME/materials/"
-echo "    /home/$USER/.gazebo/models/$MODELNAME/"
-echo " "
-echo "  FILES"
-echo "    model.config"
-echo "    model.sdf"
-echo "    $MODELNAME.png"
+echo "  DIRECTORIES AND FILES"
+echo "    $PACKAGE_PATH/models/$MODELNAME/"
+echo "    $PACKAGE_PATH/worlds/$MODELNAME.world"
+echo "    $PACKAGE_PATH/launch/$MODELNAME/"
 echo " "
 
 #Safety Feature
@@ -28,15 +27,20 @@ echo "Are you absolutely sure you want to delete this model? Once deleted, you w
 echo "NOT be able to recover it! (Y or n)"
 read ANSWER
 
-if [ $ANSWER = Y ]; then
+if [ $ANSWER = Y ] || [ $ANSWER = y ]; then
     echo " "
 else 
+    echo "Skipped"
     exit
 fi
 
 # Interactively delete all files and directories
-if [ -d /home/$USER/.gazebo/models/$MODELNAME ]; then
-    rm -ri /home/$USER/.gazebo/models/$MODELNAME
+if [ -d $PACKAGE_PATH/models/$MODELNAME ]; then
+    rm -r $PACKAGE_PATH/models/$MODELNAME $PACKAGE_PATH/worlds/$MODELNAME.world $PACKAGE_PATH/launch/$MODELNAME/
+
+else
+	echo "Model not found"
+	exit
 fi
 
 echo " "
