@@ -1,8 +1,8 @@
-# Gazebo Terrain Model Generator
+# Automatic Gazebo Terrain Model Generator
 
 ## Summary
 
-This repository contains a simple python-based program that can generate a Gazebo terrain model from a greyscale PNG image input. The program creates the necessary files for the model based on user input, while also resizing and reformating the given heightmap image to ensure compatability with Gazebo. (Based on this [tutorial](https://github.com/AS4SR/general_info/wiki/Creating-Heightmaps-for-Gazebo))
+This repository contains a simple python-based program that can generate a Gazebo terrain model from a greyscale PNG image input. The program creates the necessary files for the model based on user input, while also resizing and reformating the given heightmap image to ensure compatability with Gazebo. (Based on this [tutorial](https://github.com/AS4SR/general_info/wiki/Creating-Heightmaps-for-Gazebo)). Its advised to use a **SRTM30 Plus** image from the tutorial mentioned.
 
 ## Requirements
 
@@ -11,32 +11,45 @@ The program requires the following to function:
 * [Pillow](http://pillow.readthedocs.io/en/3.0.x/index.html)
 * [python-resize-image](https://pypi.python.org/pypi/python-resize-image)
 
-Tested on Ubuntu 16.04 LTS with Gazebo 7.9
+Tested on **Ubuntu 20.04 LTS** with **ROS-Noetic** and **Gazebo 11**.
 
 ## Instructions
 
 ### Installation
 
-Clone the repsitory into your `home/$USER/catkin_ws/src/` directory
+* Clone the repository into your `home/$USER/$WORKSPACE/src/` directory.
+
+* Run a `catkin_make` in your $WORKSPACE folder.
+
+* Export the model paths in Gazebo:
+
+        export GAZEBO_MODEL_PATH=home/$USER/$WORKSPACE/src/gazebo_terrain/models >> ~/.bashrc && exec bash
+
 
 ### Terrain Generation
 
-Place your heightmap image into your `Pictures` directory before running the program so that it can be found. This image should be a greyscale PNG.
+Place your heightmap image into your `gazebo_terrain/pictures` directory before running the program so that it can be found. This image should be a greyscale PNG.
 
 In order for this program to work:
 
   1. The PNG should be a greyscale image without any alpha channels (ideally an unsigned 8-bit image, but the code should be able to convert other bit-size images to the proper format).
   2. The height and width (in pixels) of the PNG must be equal.
 
-In the `gazebo_terrain` directory, run the program with:
+To generate the terrain model, world and launch files:
 
-```
-./terrain_gen.sh
-```
+        rosrun gazebo_terrain terrain_gen.sh
 
-When running the program, it will first ask you for the name of your image; make sure that this is the same as the image in the `Pictures` directory but without the ".png"! You will then be asked to enter various information needed to fill out the configuration files, such as the menu name for the model, size, and other parameters.
 
-Once the program is finished generating the files, open up Gazebo to test out your model. The name that you selected for the model should appear on the `Insert` menu bar.
+When running the program, it will first ask you for the name of your image; make sure that this is the same as the image in the `gazebo_terrain/pictures` directory but without the ".png"! You will then be asked to enter various information needed to fill out the configuration files, such as the size, and other parameters.
+
+Once the program is finished generating the files, it will prompt a command to be run. For example, an image named "terrain_random.png" is present in the `gazebo_terrain/pictures` directory, so the command would be:
+
+
+        roslaunch gazebo_terrain terrain_random_world.launch
+
+Here is the output:
+
+<img src="https://user-images.githubusercontent.com/45683974/94947425-407a6e80-04fb-11eb-860e-52164d57af1a.jpg" width="900" height="420">
 
 ### Deleting Models
 
@@ -44,9 +57,7 @@ Also included in this repository is `delete_model.sh`, a script that can look in
 
 Run it with:
 
-```
-./delete_models.sh
-```
+        rosrun gazebo_terrain delete_model.sh
 
 ## Notes
 
