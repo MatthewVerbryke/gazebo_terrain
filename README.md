@@ -1,5 +1,7 @@
 # Automatic Gazebo Terrain Model Generator
 
+<img src="https://img.shields.io/badge/noetic-passing-green">
+
 ## Summary
 
 This repository contains a simple python-based program that can generate a Gazebo terrain model from a greyscale PNG image input. The program creates the necessary files for the model based on user input, while also resizing and reformating the given heightmap image to ensure compatability with Gazebo. (Based on this [tutorial](https://github.com/AS4SR/general_info/wiki/Creating-Heightmaps-for-Gazebo)). Its advised to use a **SRTM30 Plus** image from the tutorial mentioned.
