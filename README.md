@@ -25,7 +25,7 @@ Tested on **Ubuntu 20.04 LTS** with **ROS-Noetic** and **Gazebo 11**.
 
 * Export the model paths in Gazebo:
 
-        export GAZEBO_MODEL_PATH=home/$USER/$WORKSPACE/src/gazebo_terrain/models >> ~/.bashrc && exec bash
+        echo "export GAZEBO_MODEL_PATH=home/$USER/$WORKSPACE/src/gazebo_terrain/models" >> ~/.bashrc && exec bash
 
 
 ### Terrain Generation
