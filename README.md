@@ -19,13 +19,13 @@ Tested on **Ubuntu 20.04 LTS** with **ROS-Noetic** and **Gazebo 11**.
 
 ### Installation
 
-* Clone the repository into your `home/$USER/$WORKSPACE/src/` directory.
+* Clone the repository into your `~/$WORKSPACE/src/` directory.
 
 * Run a `catkin_make` in your $WORKSPACE folder.
 
 * Export the model paths in Gazebo:
 
-        echo "export GAZEBO_MODEL_PATH=home/$USER/$WORKSPACE/src/gazebo_terrain/models" >> ~/.bashrc && exec bash
+        echo "export GAZEBO_MODEL_PATH=~/$WORKSPACE/src/gazebo_terrain/models" >> ~/.bashrc && exec bash
 
 
 ### Terrain Generation
