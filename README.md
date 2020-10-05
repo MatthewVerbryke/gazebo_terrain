@@ -55,8 +55,7 @@ Here is the output:
 
 ### Deleting Models
 
-Also included in this repository is `delete_model.sh`, a script that can look into the Gazebo model directory and interactively delete the user-selected directory, if it exists. Be careful to not delete default Gazebo models or anything you want to keep when using this!
-
+Also included in this repository is `delete_model.sh`, a script that can look into the Gazebo model directory and interactively delete the user-selected directory, if it exists.
 Run it with:
 
         rosrun gazebo_terrain delete_model.sh
