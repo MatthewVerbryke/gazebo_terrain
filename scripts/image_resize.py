@@ -71,7 +71,7 @@ def main():
         print("sides be 2^n+1 (n=1,2,3,...) pixels in size. As such, recomended sizes ")
         print("include 129 x 129, 257 x 257, 513 x 513.")
         print(" ")
-        img_size = input("What side length should the final image have?:\n")
+        img_size = int(input("What side length should the final image have?:\n"))
         
         allowed_size = False
         
