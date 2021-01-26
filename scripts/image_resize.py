@@ -1,19 +1,63 @@
 #!/usr/bin/env python
-# Copyright 2017 University of Cincinnati
-# All rights reserved. See LICENSE file at:
-# https://github.com/MatthewVerbryke/gazebo_terrain
-# Additional copyright may be held by others, as reflected in the commit history.
+
+"""
+  Functions for checking and rescaling/resizing heightmaps .
+
+  Copyright 2017-2021 University of Cincinnati
+  All rights reserved. See LICENSE file at:
+  https://github.com/MatthewVerbryke/gazebo_terrain
+  Additional copyright may be held by others, as reflected in the commit
+  history.
+"""
 
 
 import math
 import os
 import sys
 
-import PIL
-from PIL import Image
+from PIL import Image, ImageTk
 
 
-def rescale_and_resize(img_name, img_size):
+def check_image_size(img_name, img_path):
+    """
+    Check to make sure the given image is square and has no channels in
+    it.
+    """
+    
+    try:
+        
+        # Open image
+        img = Image.open(img_name)
+        
+        # Determine size of image
+        width, height = img.size
+        
+        # Check if image is square
+        if (width==height):
+            is_square = True
+        else:
+            is_square = False
+            
+        # Check for channels in image
+        img_list = list(img.getdata())
+        img_max = max(img_list)
+        if (type(img_max)==int):
+            is_single_channel = True
+        else:
+            is_single_channel = False
+            
+        return is_square, is_single_channel
+            
+    finally:
+        
+        # Close image
+        img.close()
+
+def rescale_and_resize_image(img_name, img_size, save_img):
+    """
+    Convert image to 8-bit image of which is sized to the desired 
+    resolution
+    """
     
     try:
         
@@ -21,7 +65,7 @@ def rescale_and_resize(img_name, img_size):
         img = Image.open(img_name)
         
         # Resize image
-        img = img.resize((int(img_size), int(img_size)), PIL.Image.ANTIALIAS) 
+        img = img.resize((int(img_size), int(img_size)), Image.ANTIALIAS) 
         
         # Get data from image
         img_list = list(img.getdata())
@@ -48,55 +92,13 @@ def rescale_and_resize(img_name, img_size):
         img = img.convert('L')
         
         # Save image
-        img.save(img_name)
+        if save_img:
+            img.save(img_name)
+        else:
+            ph = ImageTk.PhotoImage(img)
+            return ph
         
     finally:
         
         # Close image
         img.close()
-
-def main():
-    
-    try:
-        
-        # Get cwd
-        setdir = os.getcwd()
-        
-        # Command line arguments
-        img_name = sys.argv[1] + ".png"
-        img_path = sys.argv[2]
-        
-        # Get side length
-        print("Gazebo requires that the image used for the heightmap be square and its")
-        print("sides be 2^n+1 (n=1,2,3,...) pixels in size. As such, recomended sizes ")
-        print("include 129 x 129, 257 x 257, 513 x 513.")
-        print(" ")
-        img_size = int(input("What side length should the final image have?:\n"))
-        
-        allowed_size = False
-        
-        # Check Size
-        while not allowed_size:
-            img_check = math.log(img_size - 1)/math.log(2)
-            if (img_check - int(img_check) == 0):
-                allowed_size = True
-            else:
-                print(" ")
-                print("This size is not allowed.")
-                img_size = input("Try a different size:\n")
-        
-        # Change to image directory
-        os.chdir(img_path)
-        
-        # Resize and rescale the image
-        rescale_and_resize(img_name, img_size)
-        
-    finally:
-        
-        # Change back directory
-        os.chdir(setdir)
-        
-        print(" ")
-
-
-main()

@@ -17,6 +17,9 @@ import tkFileDialog
 import Tkinter as tk
 import traceback
 
+from image_resize import rescale_and_resize_image, check_image_size
+#from model import create_model_directory, write_config_file, write_sdf_file
+
 
 class MainApp:
     """
@@ -69,12 +72,14 @@ class MainApp:
         
         self.edit_model_button = tk.Button(self.action_frame,width=17,
                                            text="Edit Existing Model",
-                                           command=lambda: self.edit_model())
+                                           command=lambda: self.edit_model(),
+                                           state=tk.DISABLED)
         self.edit_model_button.grid(row=1, column=1, sticky="nsew")
                 
         self.delete_model_button = tk.Button(self.action_frame,width=17,
                                              text="Delete Existing Model",
-                                             command=lambda: self.delete_model())
+                                             command=lambda: self.delete_model(),
+                                             state=tk.DISABLED)
         self.delete_model_button.grid(row=2, column=0, sticky="nsew")
         
         # Config Frame
@@ -210,9 +215,40 @@ class MainApp:
         
     def load_heightmap(self):
         """
-        TODO
+        Function to select a heightmap, check that the image meets 
+        Gazebo's requirements, and display the image onto the GUI canvas.
         """
-        pass
+        
+        # Get the desired heightmap file name and location
+        self.heightmap_file = tkFileDialog.askopenfilename()
+        self.heightmap_path, self.heightmap_name = os.path.split(self.heightmap_file)
+        
+        try:
+            
+            # Go to the selected directory
+            os.chdir(self.heightmap_path)
+
+            # Check the desired image for issues
+            is_square, is_single_channel = check_image_size(self.heightmap_name, self.heightmap_path)
+            if not is_square:
+                print("ERROR: The specified image is not square (height=width)")
+            if not is_single_channel:
+                print("ERROR: There may be another channel in the image. Make sure the image is greyscale with all other channels removed.")
+            
+            # Display the image in the GUI canvas
+            # https://stackoverflow.com/questions/45668895/tkinter-tclerror-image-doesnt-exist
+            if is_square and is_single_channel:
+                ph = rescale_and_resize_image(self.heightmap_name, 512, False)
+                self.image_canvas.create_image(265, 265, image=ph)
+                self.image_canvas.image = ph
+                
+            # Display the heightmap path
+            self.full_path_var.set(self.heightmap_path + "/" + self.heightmap_name)
+                
+        finally: 
+            
+            # Go back to the main directory
+            os.chdir(self.setdir)
         
     def generate_model(self):
         """
@@ -226,7 +262,14 @@ class MainApp:
         
         TODO: finish
         """
+        
+        # Reset Buttons
         self.disable_editing()
+        
+        # Delete image and model information
+        self.image_canvas.delete('all')
+        self.heightmap_path = None
+        self.heightmap_name = None
         
     def enable_editing(self):
         """
@@ -244,8 +287,8 @@ class MainApp:
         self.generate_model_button.configure(state=tk.NORMAL)
         self.cancel_button.configure(state=tk.NORMAL)
         self.create_model_button.configure(state=tk.DISABLED)
-        self.edit_model_button.configure(state=tk.DISABLED)
-        self.delete_model_button.configure(state=tk.DISABLED)
+        #self.edit_model_button.configure(state=tk.DISABLED)
+        #self.delete_model_button.configure(state=tk.DISABLED)
         
     def disable_editing(self):
         """
@@ -263,8 +306,8 @@ class MainApp:
         self.generate_model_button.configure(state=tk.DISABLED)
         self.cancel_button.configure(state=tk.DISABLED)
         self.create_model_button.configure(state=tk.NORMAL)
-        self.edit_model_button.configure(state=tk.NORMAL)
-        self.delete_model_button.configure(state=tk.NORMAL)
+        #self.edit_model_button.configure(state=tk.NORMAL)
+        #self.delete_model_button.configure(state=tk.NORMAL)
         
 
 if __name__=="__main__":
