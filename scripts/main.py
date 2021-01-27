@@ -10,7 +10,7 @@
   history.
 """
 
-
+ 
 import os
 from shutil import copyfile
 import tkFileDialog
@@ -18,7 +18,8 @@ import Tkinter as tk
 import traceback
 
 from image_resize import rescale_and_resize_image, check_image_size
-#from model import create_model_directory, write_config_file, write_sdf_file
+from model import create_model, write_config_file, write_sdf_file
+from model import ModelInfo
 
 
 class MainApp:
@@ -67,7 +68,7 @@ class MainApp:
         
         self.create_model_button = tk.Button(self.action_frame, width=17,
                                              text="Create New Model",
-                                             command=lambda: self.create_model())
+                                             command=lambda: self.enable_editing())
         self.create_model_button.grid(row=1, column=0, sticky="nsew")
         
         self.edit_model_button = tk.Button(self.action_frame,width=17,
@@ -193,13 +194,6 @@ class MainApp:
         # Picture Frame
         self.image_canvas = tk.Canvas(self.heightmap_frame, width=530, height=530)
         self.image_canvas.grid(row=0)
-        
-    def create_model(self):
-        """
-        Enable model creation buttons.
-        """
-        
-        self.enable_editing()
     
     def edit_model(self):
         """
@@ -252,10 +246,36 @@ class MainApp:
         
     def generate_model(self):
         """
-        TODO
+        Function to funnel entered values to the model creation functions.
         """
-        pass
+        
+        # Store entries from the GUI
+        model_info = ModelInfo()
+        model_info.name = self.model_name_var.get()
+        model_info.author = self.creator_name_var.get()
+        model_info.email = self.email_var.get()
+        model_info.description = self.description_var.get()
+        model_info.heightmap = self.heightmap_name
+        model_info.resolution = self.pixel_len_var.get()
+        model_info.side = self.size_x_var.get()
+        model_info.range = self.size_z_var.get()
+        
+        # Check the entries for issues
+        is_ok = model_info.check_entries()
+
+        # Create model
+        if is_ok:
+            success = create_model(self.heightmap_path,
+                                   self.heightmap_name,
+                                   model_info)
+            if success:
+                print "Terrain model generated."
+            else:
+                print "Failed to generate terrain model."
                 
+        else:
+            pass #TODO
+    
     def cancel_program(self):
         """
         Disable model creation and purge entered information
@@ -270,6 +290,14 @@ class MainApp:
         self.image_canvas.delete('all')
         self.heightmap_path = None
         self.heightmap_name = None
+        # self.model_name_var.get()
+        # self.creator_name_var.get()
+        # self.email_var.get()
+        # self.description_var.get()
+        # self.heightmap_name
+        # self.pixel_len_var.get()
+        # self.size_x_var.get()
+        # self.size_z_var.get()
         
     def enable_editing(self):
         """

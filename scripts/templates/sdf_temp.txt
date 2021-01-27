@@ -6,7 +6,7 @@
         <collision name="collision">
           <geometry>
             <heightmap>
-              <uri>model://$FILENAME$/materials/textures/$FILENAME$.png</uri>
+              <uri>model://$MODELNAME$/materials/textures/$FILENAME$.png</uri>
               <size>$SIZEX$ $SIZEY$ $SIZEZ$</size>
               <pos>0 0 0</pos>
             </heightmap>
@@ -39,7 +39,7 @@
                 <min_height>4</min_height>
                 <fade_dist>5</fade_dist>
               </blend>
-              <uri>model://$FILENAME$/materials/textures/$FILENAME$.png</uri>
+              <uri>model://$MODELNAME$/materials/textures/$FILENAME$.png</uri>
               <size>$SIZEX$ $SIZEY$ $SIZEZ$</size>
               <pos>0 0 0</pos>
             </heightmap>

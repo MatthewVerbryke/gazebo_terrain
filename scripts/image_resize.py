@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-  Functions for checking and rescaling/resizing heightmaps .
+  Functions for checking and rescaling/resizing heightmap images.
 
   Copyright 2017-2021 University of Cincinnati
   All rights reserved. See LICENSE file at:
