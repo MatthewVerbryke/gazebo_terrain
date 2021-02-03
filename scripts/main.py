@@ -50,8 +50,8 @@ class MainApp:
         self.email_var = tk.StringVar()
         self.description_var = tk.StringVar()
         self.full_path_var = tk.StringVar()
-        self.size_x_var = tk.StringVar()
-        self.size_z_var = tk.StringVar()
+        self.size_x_var = tk.DoubleVar()
+        self.size_z_var = tk.DoubleVar()
         self.pixel_len_var = tk.IntVar()
         
         # Position subframes
@@ -238,19 +238,26 @@ class MainApp:
         Function to funnel entered values to the model creation functions.
         """
         
+        # Make sure a heightmap has been selected
+        try: 
+            type(self.heightmap_name) == None
+        except:
+            print "No heightmap file selected"
+            return
+        
         # Store entries from the GUI
         model_info = ModelInfo()
-        model_info.name = self.model_name_var.get()
-        model_info.author = self.creator_name_var.get()
-        model_info.email = self.email_var.get()
-        model_info.description = self.description_var.get()
-        model_info.heightmap = self.heightmap_name
-        model_info.resolution = self.pixel_len_var.get()
-        model_info.side = self.size_x_var.get()
-        model_info.range = self.size_z_var.get()
+        model_info.name = str(self.model_name_var.get())
+        model_info.author = str(self.creator_name_var.get())
+        model_info.email = str(self.email_var.get())
+        model_info.description = str(self.description_var.get())
+        model_info.heightmap = str(self.heightmap_name)
+        model_info.resolution = int(self.pixel_len_var.get())
+        model_info.side = float(self.size_x_var.get())
+        model_info.range = float(self.size_z_var.get())
         
         # Check the entries for issues
-        is_ok = model_info.check_entries()
+        is_ok, error_msgs = model_info.check_entries()
 
         # Create model
         if is_ok:
@@ -261,9 +268,12 @@ class MainApp:
                 print "Terrain model generated."
             else:
                 print "Failed to generate terrain model."
-                
+        
+        # Print errors to terminal        
         else:
-            pass #TODO
+            for msg in error_msgs:
+                print "ERROR: " + msg
+            print ""
             
     def edit_model(self):
         """

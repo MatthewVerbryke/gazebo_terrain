@@ -13,6 +13,7 @@
 """
 
 
+import math
 import os
 from shutil import copyfile
 import string
@@ -29,11 +30,12 @@ MODEL_PATH = HOME_PATH + "/.gazebo/models/"
 
 class ModelInfo(object):
     """
-    A class variable for storing gazebo terrain model information
+    A class variable for storing gazebo terrain model information.
     """
     
     def __init__(self):
         
+        # Model variables
         self.name = ""
         self.author = ""
         self.email = ""
@@ -45,9 +47,37 @@ class ModelInfo(object):
         
     def check_entries(self):
         """
-        TODO
+        Handle common errors in field entered values for the current model
         """
-        return True
+        
+        msg_out = []
+        
+        # Check that the numbers entered make sense
+        if self.resolution <= 0:
+            error = "Entered resolution must be 1x1 or higher"
+            msg_out.append(error)
+            
+        # Check that image resolution is allowable by gazebo          
+        else:
+            img_check = math.log(self.resolution - 1)/math.log(2)
+            if (img_check - int(img_check) == 0):
+                pass
+            else:
+                error = "Entered resolution not allowed: must be an integer in the series: resolution = 2^n+1"
+                msg_out.append(error)
+            
+        if self.side <= 0:
+            error = "Terrain side lengths must be greater than 0.0 meters"
+            msg_out.append(error)
+        if self.range < 0:
+            error = "Height range must be 0.0 meters or greater"
+            msg_out.append(error)
+            
+        # Handle output
+        if len(msg_out) == 0:
+            return True, msg_out
+        else:
+            return False, msg_out
 
 def read_template(temp_file_name):
     """
@@ -106,9 +136,9 @@ def write_sdf_file(sdf_template, model_info):
     """
     Write the model infomation to the model SDF file.
     """
-    
-    try:
         
+    try:
+    
         # Filling in content
         heightmap_no_ext = os.path.splitext(model_info.heightmap)[0]
         sdf_template = sdf_template.replace("$MODELNAME$",
@@ -116,33 +146,33 @@ def write_sdf_file(sdf_template, model_info):
         sdf_template = sdf_template.replace("$FILENAME$", 
                                             heightmap_no_ext)
         sdf_template = sdf_template.replace("$SIZEX$",
-                                            model_info.side)
+                                            str(model_info.side))
         sdf_template = sdf_template.replace("$SIZEY$",
-                                            model_info.side)
+                                            str(model_info.side))
         sdf_template = sdf_template.replace("$SIZEZ$",
-                                            model_info.range)
+                                            str(model_info.range))
         # world_template = world_template.replace("$FILENAME$", img_name)
         # name_world_launch_template = name_world_launch_template.replace("$FILENAME$", img_name)
         # world_launch_template = world_launch_template.replace("$FILENAME$", img_name)
-
+    
         # Ensure results are a string
         sdf_content = str(sdf_template)
         # world_content = str(world_template)
         # name_world_launch_content = str(name_world_launch_template)
         # world_launch_content = str(world_launch_template)
-
+    
         # Open file
         target = open("model.sdf", "w")
         # target_world = open(r"%s" % (package_path + "/worlds/" + img_name + ".world"), "w")
         # target_name_launch = open(r"%s" % (package_path + "/launch/" + img_name + "/" + img_name + "_world.launch"), "w")
         # target_launch = open(r"%s" % (package_path + "/launch/" + img_name + "/" + img_name + ".launch"), "w")
-
+    
         # Write to model.sdf
         target.write(sdf_content)
         # target_world.write(world_content)
         # target_name_launch.write(name_world_launch_content)
         # target_launch.write(world_launch_content)
-
+    
     finally:
         
         # Close file
@@ -199,4 +229,3 @@ def create_model(img_path, img_name, model_info):
         
         # Change back to cwd
         os.chdir(setdir)
-
