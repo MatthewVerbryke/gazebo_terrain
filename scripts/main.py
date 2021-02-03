@@ -29,8 +29,9 @@ class MainApp:
     
     def __init__(self, master):
         
-        # Get CWD 
-        self.setdir = os.getcwd()
+        # Get relevant directories
+        self.home_dir = os.getcwd()
+        self.pict_dir = os.path.split(self.home_dir)[0] + "/pictures"
         
         # Create container for all the subframes on the GUI
         self.container = tk.Frame(master)
@@ -194,18 +195,6 @@ class MainApp:
         # Picture Frame
         self.image_canvas = tk.Canvas(self.heightmap_frame, width=530, height=530)
         self.image_canvas.grid(row=0)
-    
-    def edit_model(self):
-        """
-        TODO
-        """
-        pass
-        
-    def delete_model(self):
-        """
-        TODO
-        """
-        pass
         
     def load_heightmap(self):
         """
@@ -214,7 +203,7 @@ class MainApp:
         """
         
         # Get the desired heightmap file name and location
-        self.heightmap_file = tkFileDialog.askopenfilename()
+        self.heightmap_file = tkFileDialog.askopenfilename(initialdir=self.pict_dir)
         self.heightmap_path, self.heightmap_name = os.path.split(self.heightmap_file)
         
         try:
@@ -242,7 +231,7 @@ class MainApp:
         finally: 
             
             # Go back to the main directory
-            os.chdir(self.setdir)
+            os.chdir(self.home_dir)
         
     def generate_model(self):
         """
@@ -275,29 +264,39 @@ class MainApp:
                 
         else:
             pass #TODO
+            
+    def edit_model(self):
+        """
+        TODO
+        """
+        pass
+        
+    def delete_model(self):
+        """
+        TODO
+        """
+        pass
     
     def cancel_program(self):
         """
-        Disable model creation and purge entered information
-        
-        TODO: finish
+        Disable model creation and purge entered information.
         """
         
-        # Reset Buttons
-        self.disable_editing()
-        
-        # Delete image and model information
+        # Delete image and entry widgets
         self.image_canvas.delete('all')
         self.heightmap_path = None
         self.heightmap_name = None
-        # self.model_name_var.get()
-        # self.creator_name_var.get()
-        # self.email_var.get()
-        # self.description_var.get()
-        # self.heightmap_name
-        # self.pixel_len_var.get()
-        # self.size_x_var.get()
-        # self.size_z_var.get()
+        self.model_name_entry.delete(0, tk.END)
+        self.author_name_entry.delete(0, tk.END)
+        self.email_entry.delete(0, tk.END)
+        self.description_entry.delete(0, tk.END)
+        self.model_path_entry.delete(0, tk.END)
+        self.model_res_entry.delete(0, tk.END)
+        self.side_length_entry.delete(0, tk.END)
+        self.terrain_height_entry.delete(0, tk.END)
+        
+        # Reset Buttons
+        self.disable_editing()
         
     def enable_editing(self):
         """
