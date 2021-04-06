@@ -242,7 +242,7 @@ class MainApp:
         try: 
             type(self.heightmap_name) == None
         except:
-            print "No heightmap file selected"
+            print("No heightmap file selected")
             return
         
         # Store entries from the GUI
@@ -265,15 +265,15 @@ class MainApp:
                                    self.heightmap_name,
                                    model_info)
             if success:
-                print "Terrain model generated."
+                print("Terrain model generated.")
             else:
-                print "Failed to generate terrain model."
+                print("Failed to generate terrain model.")
         
         # Print errors to terminal        
         else:
             for msg in error_msgs:
-                print "ERROR: " + msg
-            print ""
+                print("ERROR: " + msg)
+            print("")
             
     def edit_model(self):
         """
