@@ -348,7 +348,6 @@ class MainApp:
         
 
 if __name__=="__main__":
-    
     try:
         root = tk.Tk()
         root.wm_title("Gazebo Terrain Model Generator")
