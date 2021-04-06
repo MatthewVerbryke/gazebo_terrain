@@ -24,9 +24,8 @@ from image_resize import rescale_and_resize_image
 
 
 # Get gazebo model directory path
-HOME_PATH = os.path.expanduser("~")
-MODEL_PATH = HOME_PATH + "/.gazebo/models/"
-
+PKG_PATH = rospkg.RosPack().get_path('gazebo_terrain')
+MODEL_PATH = os.path.join(PKG_PATH, "models")
 
 class ModelInfo(object):
     """
@@ -187,45 +186,33 @@ def create_model(img_path, img_name, model_info):
     heightmap, and template files.
     """
     
-    # Get path to heightmap destination
-    dest_path = MODEL_PATH + model_info.name + "/materials/textures/"
+    model_dir = os.path.join(MODEL_PATH, model_info.name)
 
-    # Get cwd
-    setdir = os.getcwd()
+    # Get path to heightmap destination
+    dest_path = os.path.join(model_dir, "materials/textures/")
     
     # Retrieve templates
-    os.chdir("templates")
-    config_template = read_template("config_temp.txt")
-    sdf_template = read_template("sdf_temp.txt")
+    config_template = read_template(os.path.join(PKG_PATH, "scripts/templates/config_temp.txt"))
+    sdf_template = read_template(os.path.join(PKG_PATH, "scripts/templates/sdf_temp.txt"))
     #world_template = read_template("name_world_temp.txt")
     #name_world_launch_template = read_template("name_world_launch_temp.txt")
     #world_launch_template = read_template("world_launch_temp.txt")
     
-    try:
-        
-        # Create directory structure
-        model_dir = MODEL_PATH + model_info.name
-        os.mkdir(model_dir)
-        os.mkdir(model_dir + "/materials")
-        os.mkdir(model_dir + "/materials/textures/")
-        
-        # Copy heightmap image to proper location
-        os.chdir(img_path)
-        copyfile(img_name, os.path.join(dest_path, img_name))
+    # Create directory structure
+    model_dir = os.path.join(MODEL_PATH, model_info.name)
+    os.mkdir(model_dir)
+    os.mkdir(model_dir + "/materials")
+    os.mkdir(model_dir + "/materials/textures/")
+    
+    # Copy heightmap image to proper location
+    copyfile(os.path.join(img_path, img_name), os.path.join(dest_path, img_name))
 
-        # Write model files
-        os.chdir(model_dir)
-        write_config_file(config_template, model_info)
-        write_sdf_file(sdf_template, model_info)
-        #write_sdf_file(img_name, sdf_template, world_template, name_world_launch_template, world_launch_template)
+    # Write model files
+    os.chdir(model_dir)
+    write_config_file(config_template, model_info)
+    write_sdf_file(sdf_template, model_info)
+    #write_sdf_file(img_name, sdf_template, world_template, name_world_launch_template, world_launch_template)
 
-        # Rescale/resize heightmap image
-        os.chdir(dest_path)
-        rescale_and_resize_image(img_name, model_info.resolution, True)
-        
-        return True
-        
-    finally:
-        
-        # Change back to cwd
-        os.chdir(setdir)
+    # Rescale/resize heightmap image
+    rescale_and_resize_image(os.path.join(dest_path, img_name), model_info.resolution, True)
+    return True
