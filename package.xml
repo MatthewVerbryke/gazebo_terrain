@@ -25,6 +25,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>rospy</exec_depend>
+  <exec_depend>python3-rospkg</exec_depend>
   <exec_depend>python3-pil</exec_depend>
   <exec_depend>python3-pil.imagetk</exec_depend>
 
