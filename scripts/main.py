@@ -203,7 +203,7 @@ class MainApp:
         """
         
         # Get the desired heightmap file name and location
-        self.heightmap_file = tkFileDialog.askopenfilename(initialdir=self.pict_dir)
+        self.heightmap_file = filedialog.askopenfilename(initialdir=self.pict_dir)
         self.heightmap_path, self.heightmap_name = os.path.split(self.heightmap_file)
         
         try:
