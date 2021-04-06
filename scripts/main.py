@@ -13,8 +13,8 @@
  
 import os
 from shutil import copyfile
-import tkFileDialog
-import Tkinter as tk
+from tkinter import filedialog
+import tkinter as tk
 import traceback
 
 from image_resize import rescale_and_resize_image, check_image_size
