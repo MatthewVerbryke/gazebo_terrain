@@ -14,7 +14,7 @@
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <maintainer email="todo@todo.todo">Matthew Verbryke</maintainer>
 
-  <license>BSD</license>
+  <license file="LICENSE">BSD</license>
 
   <url type="website">https://github.com/MatthewVerbryke/gazebo_terrain</url>
 
