@@ -48,15 +48,14 @@ touch model.config model.sdf
 cp $PACKAGE_PATH/pictures/$YOURIMAGENAME.png $MODEL_PATH/materials/textures
 
 # Resize Image
-cd $PACKAGE_PATH/scripts
-python3 image_resize.py "$YOURIMAGENAME" "$MODEL_PATH/materials/textures"
+rosrun gazebo_terrain image_resize.py "$YOURIMAGENAME" "$MODEL_PATH/materials/textures"
 echo "Heightmap copied and resized to Gazebo's requirements"
 echo " "
 
 #  Write Data to Model Files
 #python3 model_config_gen.py "$MODEL_PATH"
 #python3 model_sdf_gen.py "$MODEL_PATH" "$YOURIMAGENAME"
-python3 model.py "$MODEL_PATH" "$YOURIMAGENAME"
+rosrun gazebo_terrain model.py "$MODEL_PATH" "$YOURIMAGENAME"
 echo "The model, world and launch are created and written. The program is finished; You should now be ready to test your heightmap in Gazebo."
 echo " "
 echo "To test your terrain in the gazebo world, run the following command:"

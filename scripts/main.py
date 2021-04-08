@@ -13,8 +13,8 @@
  
 import os
 from shutil import copyfile
-import tkFileDialog
-import Tkinter as tk
+from tkinter import filedialog
+import tkinter as tk
 import traceback
 
 from image_resize import rescale_and_resize_image, check_image_size
@@ -203,7 +203,7 @@ class MainApp:
         """
         
         # Get the desired heightmap file name and location
-        self.heightmap_file = tkFileDialog.askopenfilename(initialdir=self.pict_dir)
+        self.heightmap_file = filedialog.askopenfilename(initialdir=self.pict_dir)
         self.heightmap_path, self.heightmap_name = os.path.split(self.heightmap_file)
         
         try:
@@ -242,7 +242,7 @@ class MainApp:
         try: 
             type(self.heightmap_name) == None
         except:
-            print "No heightmap file selected"
+            print("No heightmap file selected")
             return
         
         # Store entries from the GUI
@@ -265,15 +265,15 @@ class MainApp:
                                    self.heightmap_name,
                                    model_info)
             if success:
-                print "Terrain model generated."
+                print("Terrain model generated.")
             else:
-                print "Failed to generate terrain model."
+                print("Failed to generate terrain model.")
         
         # Print errors to terminal        
         else:
             for msg in error_msgs:
-                print "ERROR: " + msg
-            print ""
+                print("ERROR: " + msg)
+            print("")
             
     def edit_model(self):
         """
@@ -348,7 +348,6 @@ class MainApp:
         
 
 if __name__=="__main__":
-    
     try:
         root = tk.Tk()
         root.wm_title("Gazebo Terrain Model Generator")
