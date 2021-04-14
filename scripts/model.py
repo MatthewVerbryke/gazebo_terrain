@@ -2,8 +2,6 @@
 
 """
   Functions and Class objects for generating terrain models in Gazebo.
-  
-  TODO: Move Gazebo world/launch file generation into its own module.
 
   Copyright 2017-2021 University of Cincinnati
   All rights reserved. See LICENSE file at:
@@ -18,16 +16,9 @@ import os
 from shutil import copyfile
 import string
 import sys
-import rospkg
 
 from image_resize import rescale_and_resize_image
 from template import read_text_file
-
-
-# Get gazebo model directory path
-PKG_PATH = rospkg.RosPack().get_path('gazebo_terrain')
-TEMP_PATH = os.path.join(PKG_PATH, "scripts/templates/")
-MODEL_PATH = os.path.join(PKG_PATH, "models")
 
 
 class ModelInfo(object):
@@ -132,35 +123,21 @@ def write_sdf_file(sdf_template, model_info):
                                             str(model_info.side))
         sdf_template = sdf_template.replace("$SIZEZ$",
                                             str(model_info.range))
-        # world_template = world_template.replace("$FILENAME$", img_name)
-        # name_world_launch_template = name_world_launch_template.replace("$FILENAME$", img_name)
-        # world_launch_template = world_launch_template.replace("$FILENAME$", img_name)
-    
+            
         # Ensure results are a string
         sdf_content = str(sdf_template)
-        # world_content = str(world_template)
-        # name_world_launch_content = str(name_world_launch_template)
-        # world_launch_content = str(world_launch_template)
     
         # Open file
         target = open("model.sdf", "w")
-        # target_world = open(r"%s" % (package_path + "/worlds/" + img_name + ".world"), "w")
-        # target_name_launch = open(r"%s" % (package_path + "/launch/" + img_name + "/" + img_name + "_world.launch"), "w")
-        # target_launch = open(r"%s" % (package_path + "/launch/" + img_name + "/" + img_name + ".launch"), "w")
-    
+            
         # Write to model.sdf
         target.write(sdf_content)
-        # target_world.write(world_content)
-        # target_name_launch.write(name_world_launch_content)
-        # target_launch.write(world_launch_content)
+
     
     finally:
         
         # Close file
         target.close()
-        # target_world.close()
-        # target_name_launch.close()
-        # target_launch.close()
 
 def create_model(img_path, img_name, model_info):
     """
@@ -174,11 +151,8 @@ def create_model(img_path, img_name, model_info):
     dest_path = os.path.join(model_dir, "materials/textures/")
     
     # Retrieve templates
-    config_template = read_text_file(dest_path, "config_temp.txt")
-    sdf_template = read_text_file(dest_path, "sdf_temp.txt")
-    #world_template = read_template("name_world_temp.txt")
-    #name_world_launch_template = read_template("name_world_launch_temp.txt")
-    #world_launch_template = read_template("world_launch_temp.txt")
+    config_template = read_text_file("config_temp.txt")
+    sdf_template = read_text_file("sdf_temp.txt")
     
     # Create directory structure
     model_dir = os.path.join(MODEL_PATH, model_info.name)
@@ -193,8 +167,7 @@ def create_model(img_path, img_name, model_info):
     os.chdir(model_dir)
     write_config_file(config_template, model_info)
     write_sdf_file(sdf_template, model_info)
-    #write_sdf_file(img_name, sdf_template, world_template, name_world_launch_template, world_launch_template)
-
+    
     # Rescale/resize heightmap image
     rescale_and_resize_image(os.path.join(dest_path, img_name), model_info.resolution, True)
     return True
