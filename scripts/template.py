@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-  Function to retrieve the contents of a text file.
+  Quick functions for reading and writing to files.
 
   Copyright 2017-2021 University of Cincinnati
   All rights reserved. See LICENSE file at:
@@ -20,25 +20,48 @@ def read_text_file(dir_path, file_name):
     """
 
     # Get cwd
-    start_dir = os.getcwd()
+    cwd = os.getcwd()
     
     try:
+        
         # Go to template directory
         os.chdir(dir_path)
         
-        # Open template
-        file_obj = open(file_name, "r")
-
-        # Read template
-        content_hold = file_obj.read()
-        content = str(content_hold)
-
+        # Open and read template
+        with open(file_name, "r") as target:
+            content_hold = target.read()
+            content = str(content_hold)
+            
         return content
 
     finally:
+
+        # Return to starting directory
+        os.chdir(cwd)
         
-        # Close template
-        file_obj.close()
+def write_file_to_dir(dir_path, file_name, content):
+    """
+    Write content to a file in a designated directory.
+    
+    WARN: function overwrites any file with 'file_name' in the provided
+    directory
+    """
+    
+    # Get cwd
+    cwd = os.getcwd()
+    
+    try:
+        
+        # Go to the destination directory
+        os.chdir(dir_path)
+        
+        # Write the contents to the file
+        with open(file_name, "w") as target:
+            content_str = str(content)
+            target.write(content_str)
+            
+    finally:
         
         # Return to starting directory
-        os.chdir(start_dir)
+        os.chdir(cwd)
+            
