@@ -14,11 +14,9 @@
 import math
 import os
 from shutil import copyfile
-import string
-import sys
 
 from image_resize import rescale_and_resize_image
-from template import read_text_file
+from template import read_text_file, write_file_to_dir
 
 
 class ModelInfo(object):
@@ -72,102 +70,83 @@ class ModelInfo(object):
         else:
             return False, msg_out
 
-def write_config_file(config_template, model_info):
+
+def fill_config_template(config_temp, model_info):
     """
     Write the model infomation to the model config file.
     """
-    
-    try:
         
-        # Replace indicated values
-        config_template = config_template.replace("$MODELNAME$",
-                                                  model_info.name)
-        config_template = config_template.replace("$AUTHORNAME$",
-                                                  model_info.author)
-        config_template = config_template.replace("$EMAILADDRESS$",
-                                                  model_info.email)
-        config_template = config_template.replace("$DESCRIPTION$",
-                                                  model_info.description)
+    # Replace template values
+    config_content = config_temp
+    config_content = config_content.replace("$MODELNAME$",
+                                            model_info.name)
+    config_content = config_content.replace("$AUTHORNAME$",
+                                            model_info.author)
+    config_content = config_content.replace("$EMAILADDRESS$",
+                                            model_info.email)
+    config_content = config_content.replace("$DESCRIPTION$",
+                                            model_info.description)
+                                          
+    return config_content
 
-        # Ensure results are a string
-        config_content = str(config_template)
-
-        # Open config file
-        target = open("model.config", "w")
-
-        # Write to config file
-        target.write(config_content)
-
-    finally:
-        
-        # Close file
-        target.close()
-
-
-def write_sdf_file(sdf_template, model_info):
+def fill_sdf_template(sdf_temp, model_info):
     """
     Write the model infomation to the model SDF file.
     """
-        
-    try:
     
-        # Filling in content
-        heightmap_no_ext = os.path.splitext(model_info.heightmap)[0]
-        sdf_template = sdf_template.replace("$MODELNAME$",
-                                             model_info.name)
-        sdf_template = sdf_template.replace("$FILENAME$", 
-                                            heightmap_no_ext)
-        sdf_template = sdf_template.replace("$SIZEX$",
-                                            str(model_info.side))
-        sdf_template = sdf_template.replace("$SIZEY$",
-                                            str(model_info.side))
-        sdf_template = sdf_template.replace("$SIZEZ$",
-                                            str(model_info.range))
-            
-        # Ensure results are a string
-        sdf_content = str(sdf_template)
+    # Get heightmap name with no extension
+    heightmap_no_ext = os.path.splitext(model_info.heightmap)[0]
     
-        # Open file
-        target = open("model.sdf", "w")
-            
-        # Write to model.sdf
-        target.write(sdf_content)
+    # Replace template values
+    sdf_content = sdf_temp
+    sdf_content = sdf_content.replace("$MODELNAME$",
+                                      model_info.name)
+    sdf_content = sdf_content.replace("$FILENAME$", 
+                                       heightmap_no_ext)
+    sdf_content = sdf_content.replace("$SIZEX$",
+                                      str(model_info.side))
+    sdf_content = sdf_content.replace("$SIZEY$",
+                                      str(model_info.side))
+    sdf_content = sdf_content.replace("$SIZEZ$",
+                                      str(model_info.range))
+                                        
+    return sdf_content
 
-    
-    finally:
-        
-        # Close file
-        target.close()
-
-def create_model(img_path, img_name, model_info):
+def create_model(img_path, img_name, pkg_path, model_info):
     """
     Generate a gazebo terrain model using the given model information,
     heightmap, and template files.
     """
     
-    model_dir = os.path.join(MODEL_PATH, model_info.name)
-
-    # Get path to heightmap destination
-    dest_path = os.path.join(model_dir, "materials/textures/")
+    # Relevant paths
+    temp_path = os.path.join(pkg_path, "scripts/templates")
+    model_path = os.path.join(pkg_path, "models")
     
     # Retrieve templates
-    config_template = read_text_file("config_temp.txt")
-    sdf_template = read_text_file("sdf_temp.txt")
+    config_template = read_text_file(temp_path, "config_temp.txt")
+    sdf_template = read_text_file(temp_path, "sdf_temp.txt")
     
-    # Create directory structure
-    model_dir = os.path.join(MODEL_PATH, model_info.name)
+    # Create directory structure for model
+    model_dir = os.path.join(model_path, model_info.name)
     os.mkdir(model_dir)
     os.mkdir(model_dir + "/materials")
-    os.mkdir(model_dir + "/materials/textures/")
+    os.mkdir(model_dir + "/materials/textures")
+    
+    # Get path to heightmap destination
+    dest_path = os.path.join(model_dir, "materials/textures/")
     
     # Copy heightmap image to proper location
     copyfile(os.path.join(img_path, img_name), os.path.join(dest_path, img_name))
 
+    # Fill information into templates
+    config_content = fill_config_template(config_template, model_info)
+    sdf_content = fill_sdf_template(sdf_template, model_info)
+    
     # Write model files
-    os.chdir(model_dir)
-    write_config_file(config_template, model_info)
-    write_sdf_file(sdf_template, model_info)
+    write_file_to_dir(model_dir, "model.config", config_content)
+    write_file_to_dir(model_dir, "model.sdf", sdf_content)
     
     # Rescale/resize heightmap image
     rescale_and_resize_image(os.path.join(dest_path, img_name), model_info.resolution, True)
+    
     return True

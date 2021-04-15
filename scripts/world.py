@@ -26,9 +26,6 @@ def fill_world_template(world_temp, model_info):
     world_content = world_temp
     world_content = world_content.replace("$FILENAME$", model_info.name)
 
-    # Setup file name
-    world_name = "{}.world".format(model_info.name)
-    
     return world_content
     
 
@@ -41,9 +38,6 @@ def fill_launch_template(launch_temp, model_info):
     launch_content = launch_temp
     launch_content = launch_content.replace("$FILENAME$", model_info.name)
     
-    # Setup file name
-    launch_name = "{}_world.launch".format(model_info.name)
-    
     return launch_content
 
 def create_gazebo_files(pkg_path, model_info):
@@ -53,9 +47,9 @@ def create_gazebo_files(pkg_path, model_info):
     """
     
     # Relevant paths
-    temp_path = pkg_path + "/scripts/templates"
-    world_path = pkg_path + "/worlds"
-    launch_path = pkg_path + "/launch"
+    temp_path = os.path.join(pkg_path, "scripts/templates")
+    world_path = os.path.join(pkg_path, "worlds")
+    launch_path = os.path.join(pkg_path, "launch")
     
     # Retrieve templates
     world_temp = read_text_file(temp_path, "world_temp.txt")
