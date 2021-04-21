@@ -18,8 +18,9 @@ import tkinter as tk
 import traceback
 
 from image_resize import rescale_and_resize_image, check_image_size
-from model import create_model, write_config_file, write_sdf_file
+from model import create_model
 from model import ModelInfo
+from world import create_gazebo_files
 
 
 class MainApp:
@@ -31,7 +32,8 @@ class MainApp:
         
         # Get relevant directories
         self.home_dir = os.getcwd()
-        self.pict_dir = os.path.split(self.home_dir)[0] + "/pictures"
+        self.pict_dir = os.path.expanduser("~") + "/Pictures"
+        self.pkg_dir = os.path.split(self.home_dir)[0]
         
         # Create container for all the subframes on the GUI
         self.container = tk.Frame(master)
@@ -259,15 +261,23 @@ class MainApp:
         # Check the entries for issues
         is_ok, error_msgs = model_info.check_entries()
 
-        # Create model
+        # Create model and Gazebo world/launch files
         if is_ok:
             success = create_model(self.heightmap_path,
                                    self.heightmap_name,
+                                   self.pkg_dir,
                                    model_info)
             if success:
                 print("Terrain model generated.")
             else:
                 print("Failed to generate terrain model.")
+                
+            success2 = create_gazebo_files(self.pkg_dir,
+                                           model_info)
+            if success2:
+                print("Gazebo world and launch files generated.")
+            else:
+                print("Failed to generate Gazebo world and/or launch files.")
         
         # Print errors to terminal        
         else:

@@ -117,36 +117,42 @@ def create_model(img_path, img_name, pkg_path, model_info):
     Generate a gazebo terrain model using the given model information,
     heightmap, and template files.
     """
-    
+
     # Relevant paths
     temp_path = os.path.join(pkg_path, "scripts/templates")
     model_path = os.path.join(pkg_path, "models")
-    
-    # Retrieve templates
-    config_template = read_text_file(temp_path, "config_temp.txt")
-    sdf_template = read_text_file(temp_path, "sdf_temp.txt")
-    
-    # Create directory structure for model
-    model_dir = os.path.join(model_path, model_info.name)
-    os.mkdir(model_dir)
-    os.mkdir(model_dir + "/materials")
-    os.mkdir(model_dir + "/materials/textures")
-    
-    # Get path to heightmap destination
-    dest_path = os.path.join(model_dir, "materials/textures/")
-    
-    # Copy heightmap image to proper location
-    copyfile(os.path.join(img_path, img_name), os.path.join(dest_path, img_name))
+            
+    try:
+        
+        # Retrieve templates
+        config_template = read_text_file(temp_path, "config_temp.txt")
+        sdf_template = read_text_file(temp_path, "sdf_temp.txt")
+        
+        # Create directory structure for model
+        model_dir = os.path.join(model_path, model_info.name)
+        os.mkdir(model_dir)
+        os.mkdir(model_dir + "/materials")
+        os.mkdir(model_dir + "/materials/textures")
+        
+        # Get path to heightmap destination
+        dest_path = os.path.join(model_dir, "materials/textures/")
+        
+        # Copy heightmap image to proper location
+        copyfile(os.path.join(img_path, img_name), os.path.join(dest_path, img_name))
 
-    # Fill information into templates
-    config_content = fill_config_template(config_template, model_info)
-    sdf_content = fill_sdf_template(sdf_template, model_info)
+        # Fill information into templates
+        config_content = fill_config_template(config_template, model_info)
+        sdf_content = fill_sdf_template(sdf_template, model_info)
+        
+        # Write model files
+        write_file_to_dir(model_dir, "model.config", config_content)
+        write_file_to_dir(model_dir, "model.sdf", sdf_content)
+        
+        # Rescale/resize heightmap image
+        rescale_and_resize_image(os.path.join(dest_path, img_name), model_info.resolution, True)
     
-    # Write model files
-    write_file_to_dir(model_dir, "model.config", config_content)
-    write_file_to_dir(model_dir, "model.sdf", sdf_content)
-    
-    # Rescale/resize heightmap image
-    rescale_and_resize_image(os.path.join(dest_path, img_name), model_info.resolution, True)
-    
-    return True
+        return True
+        
+    except:
+        
+        return False
