@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-  GUI related code for gazebo terrain model generator.
+  GUI related code for Gazebo terrain model generator.
 
   Copyright 2021 University of Cincinnati
   All rights reserved. See LICENSE file at:
@@ -17,13 +17,14 @@ from tkinter import filedialog
 import tkinter as tk
 import traceback
 
+from delete import DeleteMenuApp
 from image_resize import rescale_and_resize_image, check_image_size
 from model import create_model
 from model import ModelInfo
 from world import create_gazebo_files
 
 
-class MainApp:
+class MainApp():
     """
     Main GUI class
     """
@@ -35,8 +36,11 @@ class MainApp:
         self.pict_dir = os.path.expanduser("~") + "/Pictures"
         self.pkg_dir = os.path.split(self.home_dir)[0]
         
+        # Store master
+        self.master = master
+        
         # Create container for all the subframes on the GUI
-        self.container = tk.Frame(master)
+        self.container = tk.Frame(self.master)
         self.container.grid(sticky="nsew")
         
         # Create subframes
@@ -82,8 +86,7 @@ class MainApp:
                 
         self.delete_model_button = tk.Button(self.action_frame,width=17,
                                              text="Delete Existing Model",
-                                             command=lambda: self.delete_model(),
-                                             state=tk.DISABLED)
+                                             command=lambda: self.delete_model())
         self.delete_model_button.grid(row=2, column=0, sticky="nsew")
         
         # Config Frame
@@ -244,7 +247,7 @@ class MainApp:
         try: 
             type(self.heightmap_name) == None
         except:
-            print("No heightmap file selected")
+            print("Error: No heightmap file selected")
             return
         
         # Store entries from the GUI
@@ -293,9 +296,13 @@ class MainApp:
         
     def delete_model(self):
         """
-        TODO
+        Create a model deletion popup
         """
-        pass
+        
+        # Launch delete menu popup
+        self.new = tk.Toplevel(self.master)
+        delete_menu = DeleteMenuApp(self.new, self.pkg_dir)
+        self.new.grab_set()           
     
     def cancel_program(self):
         """
@@ -323,39 +330,38 @@ class MainApp:
         Set GUI to enable editing
         """
         
-        self.model_name_entry.configure(state=tk.NORMAL)
-        self.author_name_entry.configure(state=tk.NORMAL)
-        self.email_entry.configure(state=tk.NORMAL)
-        self.description_entry.configure(state=tk.NORMAL)
-        self.model_select_button.configure(state=tk.NORMAL)
-        self.model_res_entry.configure(state=tk.NORMAL)
-        self.side_length_entry.configure(state=tk.NORMAL)
-        self.terrain_height_entry.configure(state=tk.NORMAL)
-        self.generate_model_button.configure(state=tk.NORMAL)
-        self.cancel_button.configure(state=tk.NORMAL)
-        self.create_model_button.configure(state=tk.DISABLED)
-        #self.edit_model_button.configure(state=tk.DISABLED)
-        #self.delete_model_button.configure(state=tk.DISABLED)
+        self.model_name_entry.config(state=tk.NORMAL)
+        self.author_name_entry.config(state=tk.NORMAL)
+        self.email_entry.config(state=tk.NORMAL)
+        self.description_entry.config(state=tk.NORMAL)
+        self.model_select_button.config(state=tk.NORMAL)
+        self.model_res_entry.config(state=tk.NORMAL)
+        self.side_length_entry.config(state=tk.NORMAL)
+        self.terrain_height_entry.config(state=tk.NORMAL)
+        self.generate_model_button.config(state=tk.NORMAL)
+        self.cancel_button.config(state=tk.NORMAL)
+        self.create_model_button.config(state=tk.DISABLED)
+        #self.edit_model_button.config(state=tk.DISABLED)
+        self.delete_model_button.config(state=tk.DISABLED)
         
     def disable_editing(self):
         """
         Set GUI back to start position
         """
         
-        self.model_name_entry.configure(state=tk.DISABLED)
-        self.author_name_entry.configure(state=tk.DISABLED)
-        self.email_entry.configure(state=tk.DISABLED)
-        self.description_entry.configure(state=tk.DISABLED)
-        self.model_select_button.configure(state=tk.DISABLED)
-        self.model_res_entry.configure(state=tk.DISABLED)
-        self.side_length_entry.configure(state=tk.DISABLED)
-        self.terrain_height_entry.configure(state=tk.DISABLED)
-        self.generate_model_button.configure(state=tk.DISABLED)
-        self.cancel_button.configure(state=tk.DISABLED)
-        self.create_model_button.configure(state=tk.NORMAL)
-        #self.edit_model_button.configure(state=tk.NORMAL)
-        #self.delete_model_button.configure(state=tk.NORMAL)
-        
+        self.model_name_entry.config(state=tk.DISABLED)
+        self.author_name_entry.config(state=tk.DISABLED)
+        self.email_entry.config(state=tk.DISABLED)
+        self.description_entry.config(state=tk.DISABLED)
+        self.model_select_button.config(state=tk.DISABLED)
+        self.model_res_entry.config(state=tk.DISABLED)
+        self.side_length_entry.config(state=tk.DISABLED)
+        self.terrain_height_entry.config(state=tk.DISABLED)
+        self.generate_model_button.config(state=tk.DISABLED)
+        self.cancel_button.config(state=tk.DISABLED)
+        self.create_model_button.config(state=tk.NORMAL)
+        #self.edit_model_button.config(state=tk.NORMAL)
+        self.delete_model_button.config(state=tk.NORMAL)
 
 if __name__=="__main__":
     try:
