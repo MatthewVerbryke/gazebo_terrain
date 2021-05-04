@@ -3,24 +3,16 @@
   <name>gazebo_terrain</name>
   <version>0.0.0</version>
   <description>
-    This repository contains a simple python-based program that can 
-    generate a Gazebo terrain model from a greyscale PNG image input. 
-    The program creates the necessary files for the model based on user 
-    input, while also resizing and reformating the given heightmap image 
-    to ensure compatability with Gazebo. (Based on this tutorial). 
-    Its advised to use a SRTM30 Plus image from the tutorial mentioned.
+    A simple automatic terrain model generator for Gazebo
   </description>
 
-  <!-- One maintainer tag required, multiple allowed, one person per tag -->
-  <maintainer email="todo@todo.todo">Matthew Verbryke</maintainer>
+  <maintainer email="verbrymr@mail.uc.edu">Matthew Verbryke</maintainer>
 
   <license file="LICENSE">BSD</license>
 
   <url type="website">https://github.com/MatthewVerbryke/gazebo_terrain</url>
-
-
-  <!-- Author tags are optional, multiple are allowed, one per tag -->
-  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+  
+  <author email="verbrymr@mail.uc.edu">Matthew Verbryke</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
@@ -28,14 +20,10 @@
   <exec_depend>python3-rospkg</exec_depend>
   <exec_depend>python3-pil</exec_depend>
   <exec_depend>python3-pil.imagetk</exec_depend>
-
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>gazebo_ros_pkgs</exec_depend>
 
   <export>
-    <!-- gazebo_ros_paths_plugin automatically adds these to
-         GAZEBO_PLUGIN_PATH and GAZEBO_MODEL_PATH when you do this export inside
-         the package.xml file. You can than use URIs of type model://my_package/stuff. -->
     <gazebo_ros gazebo_model_path="${prefix}/models"/>
     <gazebo_ros gazebo_media_path="${prefix}/models"/>
   </export>
