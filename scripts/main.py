@@ -44,11 +44,11 @@ class MainApp():
         self.container.grid(sticky="nsew")
         
         # Create subframes
-        self.action_frame = tk.Frame(self.container, highlightthickness=2)
-        self.config_frame = tk.Frame(self.container, highlightthickness=2)
-        self.model_frame = tk.Frame(self.container, highlightthickness=2)
-        self.generation_frame = tk.Frame(self.container, highlightthickness=2)
-        self.heightmap_frame = tk.Frame(self.container, highlightthickness=2)
+        self.action_frame = tk.Frame(self.container)
+        self.config_frame = tk.Frame(self.container)
+        self.model_frame = tk.Frame(self.container)
+        self.generation_frame = tk.Frame(self.container)
+        self.heightmap_frame = tk.Frame(self.container)
         
         # Declare entry variables
         self.model_name_var = tk.StringVar()
@@ -90,12 +90,14 @@ class MainApp():
         self.delete_model_button.grid(row=2, column=0, sticky="nsew")
         
         # Config Frame
-        self.action_frame_title = tk.Label(self.config_frame, width=40,
-                                           text="Model Configuration")
-        self.action_frame_title.grid(row=0, columnspan=2, sticky="nsew")
+        self.config_frame_title = tk.Label(self.config_frame, width=40,
+                                           text="Model Configuration",
+                                           fg="gray")
+        self.config_frame_title.grid(row=0, columnspan=2, sticky="nsew")
         
         self.model_name_label = tk.Label(self.config_frame,
-                                         text="Model Name")
+                                         text="Model Name",
+                                         fg="gray")
         self.model_name_label.grid(row=1, column=0)
             
         self.model_name_entry = tk.Entry(self.config_frame,
@@ -104,7 +106,8 @@ class MainApp():
         self.model_name_entry.grid(row=1, column=1, sticky="ew")
 
         self.author_name_label = tk.Label(self.config_frame,
-                                          text="Your Name")
+                                          text="Your Name",
+                                          fg="gray")
         self.author_name_label.grid(row=2, column=0)
         
         self.author_name_entry = tk.Entry(self.config_frame,
@@ -113,7 +116,8 @@ class MainApp():
         self.author_name_entry.grid(row=2, column=1, sticky="ew")
         
         self.email_label = tk.Label(self.config_frame,
-                                    text="Your Email")
+                                    text="Your Email",
+                                    fg="gray")
         self.email_label.grid(row=3, column=0)
         
         self.email_entry = tk.Entry(self.config_frame, 
@@ -122,7 +126,8 @@ class MainApp():
         self.email_entry.grid(row=3, column=1, sticky="ew")
 
         self.description_label = tk.Label(self.config_frame,
-                                          text="Add a short model description")
+                                          text="Add a short model description",
+                                          fg="gray")
         self.description_label.grid(row=4, column=0, columnspan=2, sticky="ew")
         
         self.description_entry = tk.Entry(self.config_frame,
@@ -132,7 +137,8 @@ class MainApp():
         
         # Model Information Frame
         self.model_frame_title = tk.Label(self.model_frame, width=40,
-                                          text="Terrain Configuration*")
+                                          text="Terrain Configuration",
+                                          fg="gray")
         self.model_frame_title.grid(row=0, columnspan=3, sticky="nsew")
         
         self.model_select_button = tk.Button(self.model_frame, width=17,
@@ -147,7 +153,8 @@ class MainApp():
         self.model_path_entry.grid(row=2, column=0, columnspan=3, sticky="ew")
         
         self.model_res_label = tk.Label(self.model_frame,
-                                        text="Rescaled Side Length")
+                                        text="Rescaled Side Length",
+                                        fg="gray")
         self.model_res_label.grid(row=3, column=0, sticky="ew")
         
         self.model_res_entry = tk.Entry(self.model_frame, width=12,
@@ -156,11 +163,13 @@ class MainApp():
         self.model_res_entry.grid(row=3, column=1, sticky="ew")
         
         self.model_res_unit = tk.Label(self.model_frame,
-                                       text="pixels")
+                                       text="pixels",
+                                       fg="gray")
         self.model_res_unit.grid(row=3, column=2, sticky="ew")
         
         self.side_length_label = tk.Label(self.model_frame,
-                                          text="Side Dimension")
+                                          text="Side Dimension",
+                                          fg="gray")
         self.side_length_label.grid(row=4, column=0, sticky="ew")
     
         self.side_length_entry = tk.Entry(self.model_frame, width=12,
@@ -168,11 +177,13 @@ class MainApp():
                                           state=tk.DISABLED)
         self.side_length_entry.grid(row=4, column=1, sticky="ew")
     
-        self.side_length_unit = tk.Label(self.model_frame, text="meters")
+        self.side_length_unit = tk.Label(self.model_frame, text="meters",
+                                         fg="gray")
         self.side_length_unit.grid(row=4, column=2, sticky="ew")
     
         self.terrain_height_label = tk.Label(self.model_frame,
-                                             text="Highest Elevation")
+                                             text="Highest Elevation",
+                                             fg="gray")
         self.terrain_height_label.grid(row=5, column=0, sticky="ew")
     
         self.terrain_height_entry = tk.Entry(self.model_frame, width=12, 
@@ -180,7 +191,8 @@ class MainApp():
                                              state=tk.DISABLED)
         self.terrain_height_entry.grid(row=5, column=1, sticky="ew")
     
-        self.terrain_height_unit = tk.Label(self.model_frame, text="meters")
+        self.terrain_height_unit = tk.Label(self.model_frame, text="meters",
+                                            fg="gray")
         self.terrain_height_unit.grid(row=5, column=2, sticky="ew")
         
         # Generation Frame
@@ -288,6 +300,9 @@ class MainApp():
                 print("ERROR: " + msg)
             print("")
             
+        # Purge entries and return to main buttons
+        self.cancel_program()
+            
     def edit_model(self):
         """
         TODO
@@ -313,6 +328,7 @@ class MainApp():
         self.image_canvas.delete('all')
         self.heightmap_path = None
         self.heightmap_name = None
+        self.full_path_var.set("")
         self.model_name_entry.delete(0, tk.END)
         self.author_name_entry.delete(0, tk.END)
         self.email_entry.delete(0, tk.END)
@@ -322,14 +338,33 @@ class MainApp():
         self.side_length_entry.delete(0, tk.END)
         self.terrain_height_entry.delete(0, tk.END)
         
-        # Reset Buttons
+        # Reset Labels and Buttons
         self.disable_editing()
+        
+    def change_label_colors(self, color):
+        """
+        Change all config and model frame labels to the specified color.
+        """
+        
+        self.config_frame_title.config(fg=color)
+        self.model_name_label.config(fg=color)
+        self.author_name_label.config(fg=color)
+        self.email_label.config(fg=color)
+        self.description_label.config(fg=color)
+        self.model_frame_title.config(fg=color)
+        self.model_res_label.config(fg=color)
+        self.model_res_unit.config(fg=color)
+        self.side_length_label.config(fg=color)
+        self.side_length_unit.config(fg=color)
+        self.terrain_height_label.config(fg=color)
+        self.terrain_height_unit.config(fg=color)
         
     def enable_editing(self):
         """
         Set GUI to enable editing
         """
         
+        # Disable/Enable correct buttons
         self.model_name_entry.config(state=tk.NORMAL)
         self.author_name_entry.config(state=tk.NORMAL)
         self.email_entry.config(state=tk.NORMAL)
@@ -344,11 +379,15 @@ class MainApp():
         #self.edit_model_button.config(state=tk.DISABLED)
         self.delete_model_button.config(state=tk.DISABLED)
         
+        # Change label colors
+        self.change_label_colors("black")
+        
     def disable_editing(self):
         """
         Set GUI back to start position
         """
         
+        # Disable/Enable correct buttons
         self.model_name_entry.config(state=tk.DISABLED)
         self.author_name_entry.config(state=tk.DISABLED)
         self.email_entry.config(state=tk.DISABLED)
@@ -362,6 +401,9 @@ class MainApp():
         self.create_model_button.config(state=tk.NORMAL)
         #self.edit_model_button.config(state=tk.NORMAL)
         self.delete_model_button.config(state=tk.NORMAL)
+        
+        # Change label colors
+        self.change_label_colors("gray")
 
 if __name__=="__main__":
     try:

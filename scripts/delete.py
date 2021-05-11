@@ -115,8 +115,6 @@ class DeleteMenuApp():
                                              command=lambda: self.master.destroy())
         self.cancel_final_button.grid(row=1, column=1, sticky="ew")
         
-
-        
     def check_model_elements(self):
         """
         Check the model provided by the user to ensure it actually exists
@@ -137,7 +135,7 @@ class DeleteMenuApp():
         top_exists = os.path.isdir(model_full_path)
         if not top_exists:
             print ("ERROR: No model named '{}' exists in the model directory".format(name))
-            self.master.destroy()
+            return False
             
         # Retrieve name of all files within the model directory
         self.dir_list = [os.path.join(model_full_path, "materials/textures/"),
@@ -154,9 +152,9 @@ class DeleteMenuApp():
                 if is_dir:
                     j_dir = j + "/"
                     if j_dir not in self.dir_list:
-                        print ("ERROR: Additional directory found in model structure:")
+                        print ("ERROR: Unexpected directory found in model structure:")
                         print ("       " + j_dir)
-                        self.master.destroy()
+                        return False
 
         # Check for world and launch files
         world_ext = os.path.join(self.world_dir, name + ".world")
