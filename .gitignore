@@ -1,2 +1,5 @@
+launch/*
 models/*
+worlds/*
 scripts/__pycache__
+*.pyc
